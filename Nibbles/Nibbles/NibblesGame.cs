@@ -595,14 +595,14 @@ namespace Nibbles
             // being drawn in a darker color if the terminal doesn't support bright colors.
             const char noneChar = ' ', fullChar = '█', upperHalfChar = '▀', lowerHalfChar = '▄';
 
-            var blue = TerminalFormatting.ForegroundBlue;
-            var yellow = TerminalFormatting.ForegroundYellow;
-            var red = TerminalFormatting.ForegroundRed;
-            var white = TerminalFormatting.ForegroundWhite;
+            const TerminalFormatting blue = TerminalFormatting.ForegroundBlue;
+            const TerminalFormatting yellow = TerminalFormatting.ForegroundYellow;
+            const TerminalFormatting red = TerminalFormatting.ForegroundRed;
+            const TerminalFormatting white = TerminalFormatting.ForegroundWhite;
 
-            var currentForeground = (TerminalFormatting)(-1);
-            var currentBackground = (TerminalFormatting)(-1);
-            bool currentIsBrightBackground = false;
+            var currentForeground = null as TerminalFormatting?;
+            var currentBackground = null as TerminalFormatting?;
+            var currentIsBrightBackground = null as bool?;
 
             TerminalFormatting getElementColor(FieldScreenBufferElement element)
             {
