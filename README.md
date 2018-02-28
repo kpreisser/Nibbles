@@ -8,8 +8,10 @@ Windows 10 Anniversary Update (or higher), Linux and macOS.
 
 As a console application, it uses
 [Virtual Terminal Sequences](https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences)
-that are supported on Linux/macOS terminals, and also on Windows 10 Anniversary Update (Version 1607) or higher,
-to control colors, cursor movement/visibility and the screen buffer of the console.
+that are supported on Linux/macOS terminals, and also on Windows 10 Anniversary Update (Version 1607)
+or higher, to control colors, cursor movement/visibility and the screen buffer of the console. For
+example, it switches to an alternate screen buffer, so that when exiting the game, the console
+can restore its previous content.
 
 ## Screenshots
 

@@ -15,7 +15,7 @@ namespace Nibbles.Utils
     /// 
     /// For Windows, you must explicitly enable the processing of VT100 sequences by calling
     /// <see cref="EnableWindowsVirtualTerminalSequences"/>
-    /// (this only works on Windows 10 Version 1511 an above). On other OSes like Linux,
+    /// (this only works on Windows 10 Version 1607 an above). On other OSes like Linux,
     /// this works by default.
     /// 
     /// Note that some terminals (e.g. Linux without a GUI) do not support the "Bright"
