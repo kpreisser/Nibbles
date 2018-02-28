@@ -1,10 +1,10 @@
 # Nibbles
 
-A simple, console-based snake game, implemented in C# and running on .NET Core, inspired by
+A simple, console-based snake game, implemented in C# and running on .NET Core 2.0, inspired by
 [QBasic Nibbles](https://en.wikipedia.org/wiki/Nibbles_(video_game)) from 1990.
 
 Because it is built for .NET Core, it can run on any platform that .NET Core supports, e.g.
-Windows 10 Anniversary Update (or higher), Linux and macOS.
+Windows 10 (Anniversary Update or higher), Linux and macOS.
 
 As a console application, it uses
 [Virtual Terminal Sequences](https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences)
