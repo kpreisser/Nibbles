@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Nibbles.Utils
@@ -57,15 +56,22 @@ namespace Nibbles.Utils
             var handle = NativeMethods.GetStdHandle(
                     stdErr ? NativeMethods.StdErrorHandle : NativeMethods.StdOutputHandle);
             if (handle == (IntPtr)(-1))
-                throw new Win32Exception(Marshal.GetLastWin32Error());
+                throw new Win32Exception();
 
             if (!NativeMethods.GetConsoleMode(handle, out uint consoleMode))
-                throw new Win32Exception(Marshal.GetLastWin32Error());
+                throw new Win32Exception();
 
-            consoleMode |= NativeMethods.EnableVirtualTerminalProcessing |
-                    NativeMethods.DisableNewlineAutoReturn;
+            // Note: DisableNewlineAutoReturn seems to have a different behavior than documented:
+            // The documentation says it ensures that when writing the last character of a line,
+            // the cursor does not immediately move to the next line and cause scrolling - this
+            // behavior is already enabled with 'EnableVirtualTerminalProcessing'.
+            // Instead, when printing '\n', it causes the cursor to move one position down without
+            // moving to the beginning of the line, which does not match the behavior of *nix
+            // terminals. Therefore we do not specify it.
+            consoleMode |= NativeMethods.EnableVirtualTerminalProcessing /* |
+                    NativeMethods.DisableNewlineAutoReturn */;
             if (!NativeMethods.SetConsoleMode(handle, consoleMode))
-                throw new Win32Exception(Marshal.GetLastWin32Error());
+                throw new Win32Exception();
         }
         
 
