@@ -87,7 +87,7 @@ namespace Nibbles
             this.formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));
             this.writeConsoleDelegate = writeConsoleDelegate ?? throw new ArgumentNullException(nameof(writeConsoleDelegate));
             this.playerName = playerName ?? throw new ArgumentNullException(nameof(playerName));
-            this.tickWaitTime = (int)Math.Round(180d * Math.Pow(2, -(speed - 1) * 0.3d));
+            this.tickWaitTime = (int)Math.Round(180d * Math.Pow(2, -(speed - 1) * 0.35d));
 
             // Ensure the console is large enough.
             if (ConsoleUtils.ConsoleWidth < 50 ||
