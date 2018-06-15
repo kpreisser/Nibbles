@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 
 using Nibbles.Utils;
@@ -15,7 +16,7 @@ namespace Nibbles
         {
             // If we are running on Windows, try to enable virtual terminal processing.
             // On other platforms, this should be enabled by default.
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 try
                 {
@@ -50,7 +51,7 @@ namespace Nibbles
             // whereas Encoding.Unicode works. Therefore, on Windows we
             // set the InputEncoding to Unicode if the stream is not redirected; otherwise we
             // use UTF-8 to be consistent with Linux and with the output encoding.
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT && !Console.IsInputRedirected)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && !Console.IsInputRedirected)
                 Console.InputEncoding = Encoding.Unicode;
             else
                 Console.InputEncoding = Encoding.UTF8;
