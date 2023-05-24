@@ -1,13 +1,12 @@
-﻿namespace Nibbles
+﻿namespace Nibbles;
+
+internal enum SnakeDirection : int
 {
-    internal enum SnakeDirection : int
-    {
-        Up = 0,
+    Up = 0,
 
-        Left,
+    Left,
 
-        Down,
+    Down,
 
-        Right
-    }
+    Right
 }

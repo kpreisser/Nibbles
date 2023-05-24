@@ -1,85 +1,84 @@
-﻿namespace Nibbles.Utils
+﻿namespace Nibbles.Utils;
+
+internal enum TerminalFormatting
 {
-    internal enum TerminalFormatting
-    {
-        None = 0,
+    None = 0,
 
-        BoldBright = 1,
+    BoldBright = 1,
 
-        Underline = 4,
+    Underline = 4,
 
-        Negative = 7,
+    Negative = 7,
 
-        NoUnderline = 24,
+    NoUnderline = 24,
 
-        NoNegative = 27,
+    NoNegative = 27,
 
-        ForegroundBlack = 30,
+    ForegroundBlack = 30,
 
-        ForegroundRed = 31,
+    ForegroundRed = 31,
 
-        ForegroundGreen = 32,
+    ForegroundGreen = 32,
 
-        ForegroundYellow = 33,
+    ForegroundYellow = 33,
 
-        ForegroundBlue = 34,
+    ForegroundBlue = 34,
 
-        ForegroundMagenta = 35,
+    ForegroundMagenta = 35,
 
-        ForegroundCyan = 36,
+    ForegroundCyan = 36,
 
-        ForegroundWhite = 37,
+    ForegroundWhite = 37,
 
-        ForegroundDefault = 39,
+    ForegroundDefault = 39,
 
-        BackgroundBlack = 40,
+    BackgroundBlack = 40,
 
-        BackgroundRed = 41,
+    BackgroundRed = 41,
 
-        BackgroundGreen = 42,
+    BackgroundGreen = 42,
 
-        BackgroundYellow = 43,
+    BackgroundYellow = 43,
 
-        BackgroundBlue = 44,
+    BackgroundBlue = 44,
 
-        BackgroundMagenta = 45,
+    BackgroundMagenta = 45,
 
-        BackgroundCyan = 46,
+    BackgroundCyan = 46,
 
-        BackgroundWhite = 47,
+    BackgroundWhite = 47,
 
-        BackgroundDefault = 49,
+    BackgroundDefault = 49,
 
-        BrightForegroundBlack = 90,
+    BrightForegroundBlack = 90,
 
-        BrightForegroundRed = 91,
+    BrightForegroundRed = 91,
 
-        BrightForegroundGreen = 92,
+    BrightForegroundGreen = 92,
 
-        BrightForegroundYellow = 93,
+    BrightForegroundYellow = 93,
 
-        BrightForegroundBlue = 94,
+    BrightForegroundBlue = 94,
 
-        BrightForegroundMagenta = 95,
+    BrightForegroundMagenta = 95,
 
-        BrightForegroundCyan = 96,
+    BrightForegroundCyan = 96,
 
-        BrightForegroundWhite = 97,
+    BrightForegroundWhite = 97,
 
-        BrightBackgroundBlack = 100,
+    BrightBackgroundBlack = 100,
 
-        BrightBackgroundRed = 101,
+    BrightBackgroundRed = 101,
 
-        BrightBackgroundGreen = 102,
+    BrightBackgroundGreen = 102,
 
-        BrightBackgroundYellow = 103,
+    BrightBackgroundYellow = 103,
 
-        BrightBackgroundBlue = 104,
+    BrightBackgroundBlue = 104,
 
-        BrightBackgroundMagenta = 105,
+    BrightBackgroundMagenta = 105,
 
-        BrightBackgroundCyan = 106,
+    BrightBackgroundCyan = 106,
 
-        BrightBackgroundWhite = 107
-    }
+    BrightBackgroundWhite = 107
 }

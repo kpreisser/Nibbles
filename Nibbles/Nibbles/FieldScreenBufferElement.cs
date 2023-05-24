@@ -1,13 +1,12 @@
-﻿namespace Nibbles
+﻿namespace Nibbles;
+
+internal enum FieldScreenBufferElement : byte
 {
-    internal enum FieldScreenBufferElement : byte
-    {
-        None = 0,
+    None = 0,
 
-        Snake,
+    Snake,
 
-        Obstacle,
+    Obstacle,
 
-        Food
-    }
+    Food
 }
