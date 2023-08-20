@@ -321,7 +321,9 @@ internal class NibblesGame
             FlushConsoleBuffer();
 
             // Exit the input thread.
-            Volatile.Write(ref this.inputThreadShouldExit, true);
+            this.inputThreadShouldExit = true;
+            Thread.MemoryBarrier();
+
             this.inputQueueWaitSemaphore.Release();
             this.inputThread.Join();
             this.inputQueueSemaphore.Dispose();
@@ -507,8 +509,10 @@ internal class NibblesGame
             while (true) {
                 // Wait until we may process the next key.
                 this.inputQueueWaitSemaphore.Wait();
+
                 // Check if we need to exit.
-                if (Volatile.Read(ref this.inputThreadShouldExit))
+                Thread.MemoryBarrier();
+                if (this.inputThreadShouldExit)
                     break;
 
                 // Read the next key and add it to the queue.
