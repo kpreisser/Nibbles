@@ -15,7 +15,7 @@ internal class NibblesGame
 {
     private const int fieldWidthOffset = 0;
 
-    private const int fieldHeightOffset = 2;    
+    private const int fieldHeightOffset = 2;
 
     private readonly WriteConsoleDelegate writeConsoleDelegate;
 
@@ -70,7 +70,7 @@ internal class NibblesGame
     private int remainingLives = 5;
 
     private SnakeDirection currentDirection;
-    
+
     private NibblesGame(
             string playerName,
             int speed,
@@ -106,7 +106,8 @@ internal class NibblesGame
             this.currentObstacleCoordinates.Add(i);
 
         // Middle lines
-        for (int i = 1; i < this.FieldHeight - 1; i++) {
+        for (int i = 1; i < this.FieldHeight - 1; i++)
+        {
             this.currentObstacleCoordinates.Add(i * this.FieldWidth + 0); // Left
             this.currentObstacleCoordinates.Add((i + 1) * this.FieldWidth - 1); // Right
         }
@@ -115,7 +116,7 @@ internal class NibblesGame
         for (int i = 0; i < this.FieldWidth; i++)
             this.currentObstacleCoordinates.Add((this.FieldHeight - 1) * this.FieldWidth + i);
     }
-    
+
     public static void Run(
         string playerName,
         int speed,
@@ -130,7 +131,8 @@ internal class NibblesGame
         if (formatter is null)
             throw new ArgumentNullException(nameof(formatter));
 
-        writeConsoleDelegate ??= (str, newLine) => {
+        writeConsoleDelegate ??= (str, newLine) =>
+        {
             if (newLine)
                 Console.Out.WriteLine(str);
             else
@@ -160,18 +162,20 @@ internal class NibblesGame
         string name = Console.ReadLine() ?? throw new EndOfStreamException();
         writeConsoleDelegate();
         writeConsoleDelegate("Please enter the speed (1-10): ", false);
-        try {
+        try
+        {
             int speed = int.Parse(Console.ReadLine() ?? throw new EndOfStreamException());
             Run(name, speed, formatter, writeConsoleDelegate);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             writeConsoleDelegate();
             writeConsoleDelegate(formatter.Format(TerminalFormatting.ForegroundRed, TerminalFormatting.BoldBright) +
                     "ERROR:" + formatter.Format(TerminalFormatting.None) + " " +
                     ConsoleUtils.FixDisplayCharacters(ex.Message));
         }
     }
-    
+
     private int FieldWidth => this.consoleWidth - fieldWidthOffset;
 
     private int FieldHeight => this.consoleHeight * 2 - fieldHeightOffset;
@@ -180,7 +184,7 @@ internal class NibblesGame
 
     private int SnakeLengthIncreasement => (int)Math.Round(6d / (80d * 25) *
             ((this.FieldWidth * this.FieldHeight - 80d * 25) * 0.7 + 80d * 25));
-        
+
     private void RunCore()
     {
         // Switch to the alternate screen buffer.
@@ -190,7 +194,8 @@ internal class NibblesGame
 
         // Start the input thread.
         this.inputThread.Start();
-        try {
+        try
+        {
             // Initialize the snake.
             ResetSnakeAndFood();
             // Allow to read a console input key.
@@ -204,22 +209,26 @@ internal class NibblesGame
             var bufferedDirection = null as SnakeDirection?;
 
             var sleepStopwatch = new Stopwatch();
-            while (true) {
+            while (true)
+            {
                 bool directionApplied = false;
                 int? remainingWaitTime = null;
 
                 // Check if we need to apply a buffered direction.
-                if (bufferedDirection != null) {
+                if (bufferedDirection != null)
+                {
                     directionApplied = TryApplyDirection(bufferedDirection.Value);
                     bufferedDirection = null;
                 }
 
-                do {
+                do
+                {
                     sleepStopwatch.Restart();
                     bool eventAvailable = this.inputQueueSemaphore.Wait(remainingWaitTime ?? this.tickWaitTime);
                     sleepStopwatch.Stop();
 
-                    if (eventAvailable) {
+                    if (eventAvailable)
+                    {
                         if (!this.inputQueue.TryDequeue(out var key))
                             throw new InvalidOperationException(); // should not happen
 
@@ -228,7 +237,8 @@ internal class NibblesGame
 
                         // Check what key was pressed.
                         var newDirection = null as SnakeDirection?;
-                        switch (key.Key) {
+                        switch (key.Key)
+                        {
                             case ConsoleKey.UpArrow:
                                 newDirection = SnakeDirection.Up;
                                 break;
@@ -257,26 +267,31 @@ internal class NibblesGame
                         // Allow to read the next key.
                         this.inputQueueWaitSemaphore.Release();
 
-                        if (newDirection != null) {
-                            if (directionApplied) {
+                        if (newDirection != null)
+                        {
+                            if (directionApplied)
+                            {
                                 // We have already applied a new direction in this tick,
                                 // so buffer the next one.
                                 bufferedDirection = newDirection;
                             }
-                            else {
+                            else
+                            {
                                 // Apply the direction directly.
                                 directionApplied = TryApplyDirection(newDirection.Value);
                             }
                         }
                     }
-                    else {
+                    else
+                    {
                         remainingWaitTime = null;
                     }
                 }
                 while (remainingWaitTime > 0);
 
                 bool result = MoveSnake();
-                if (!result) {
+                if (!result)
+                {
                     this.remainingLives--;
                     this.currentPoints -= 1000;
                     // Refresh the title with the remaining lives.
@@ -288,7 +303,8 @@ internal class NibblesGame
                         DisplayMessage("Game over! Press Space to exit.");
 
                     // Wait until space was pressed.
-                    while (true) {
+                    while (true)
+                    {
                         this.inputQueueSemaphore.Wait();
                         if (!this.inputQueue.TryDequeue(out var pausingKey))
                             throw new InvalidOperationException(); // should not happen
@@ -313,7 +329,8 @@ internal class NibblesGame
                 }
             }
         }
-        finally {
+        finally
+        {
             // Restore the console settings.
             this.consoleBuffer.Append(this.formatter.SwitchAlternateScreenBuffer(false));
             this.consoleBuffer.Append(this.formatter.SetCursorVisibility(true));
@@ -336,7 +353,8 @@ internal class NibblesGame
         DisplayMessage("Game Paused... Press Space to continue");
 
         // Wait until space was pressed.
-        while (true) {
+        while (true)
+        {
             this.inputQueueWaitSemaphore.Release();
             this.inputQueueSemaphore.Wait();
             if (!this.inputQueue.TryDequeue(out var pausingKey))
@@ -354,8 +372,10 @@ internal class NibblesGame
         DisplayMessage("Do you really want to quit?  (Y/N)");
 
         // Wait until Y or N was pressed.
-        try {
-            while (true) {
+        try
+        {
+            while (true)
+            {
                 this.inputQueueWaitSemaphore.Release();
                 this.inputQueueSemaphore.Wait();
                 if (!this.inputQueue.TryDequeue(out var pausingKey))
@@ -366,7 +386,8 @@ internal class NibblesGame
                     return true;
             }
         }
-        finally {
+        finally
+        {
             // Redraw the screen.
             DrawScreen();
         }
@@ -379,7 +400,8 @@ internal class NibblesGame
         if (newDirection == SnakeDirection.Up && this.currentDirection != SnakeDirection.Down ||
                 newDirection == SnakeDirection.Down && this.currentDirection != SnakeDirection.Up ||
                 newDirection == SnakeDirection.Left && this.currentDirection != SnakeDirection.Right ||
-                newDirection == SnakeDirection.Right && this.currentDirection != SnakeDirection.Left) {
+                newDirection == SnakeDirection.Right && this.currentDirection != SnakeDirection.Left)
+        {
             directionApplied = true;
             this.currentDirection = newDirection;
         }
@@ -415,7 +437,8 @@ internal class NibblesGame
         int number = this.random.Next(this.FieldWidth * this.FieldHeight -
                 occupiedFields.Length);
 
-        for (int i = 0; i < occupiedFields.Length; i++) {
+        for (int i = 0; i < occupiedFields.Length; i++)
+        {
             if (occupiedFields[i] <= number)
                 number++;
             else
@@ -439,7 +462,8 @@ internal class NibblesGame
             this.currentSnakeCoordinates[i] = this.currentSnakeCoordinates[i - 1];
 
         int expectedSnakeLength = this.currentFoodLevel * this.SnakeLengthIncreasement + 2;
-        if (this.currentSnakeCoordinates.Count < expectedSnakeLength) {
+        if (this.currentSnakeCoordinates.Count < expectedSnakeLength)
+        {
             // Re-add the last coordinate.
             this.currentSnakeCoordinates.Add(lastCoordinate);
             snakeGotLonger = true;
@@ -448,7 +472,8 @@ internal class NibblesGame
         int x = this.currentSnakeCoordinates[0] % this.FieldWidth;
         int y = this.currentSnakeCoordinates[0] / this.FieldWidth;
 
-        switch (this.currentDirection) {
+        switch (this.currentDirection)
+        {
             case SnakeDirection.Up:
                 y--;
                 break;
@@ -480,7 +505,8 @@ internal class NibblesGame
             if (this.currentObstacleCoordinates[i] == this.currentSnakeCoordinates[0])
                 return false;
 
-        if (this.currentSnakeCoordinates[0] == this.currentFoodCoordinate) {
+        if (this.currentSnakeCoordinates[0] == this.currentFoodCoordinate)
+        {
             // We ate the food, so generate a new one, and make the snake larger
             // (only if it didn't get longer already).
             this.currentFoodLevel++;
@@ -505,8 +531,10 @@ internal class NibblesGame
 
     private void RunInputThread()
     {
-        try {
-            while (true) {
+        try
+        {
+            while (true)
+            {
                 // Wait until we may process the next key.
                 this.inputQueueWaitSemaphore.Wait();
 
@@ -521,7 +549,8 @@ internal class NibblesGame
                 this.inputQueueSemaphore.Release();
             }
         }
-        catch {
+        catch
+        {
             // Could happen if the process does not have a console or the input stream is redirected.
             // Ignore.
         }
@@ -568,11 +597,13 @@ internal class NibblesGame
         // lines of the buffer to one line on the screen.
         Array.Clear(this.fieldScreenBuffer, 0, this.fieldScreenBuffer.Length);
 
-        foreach (var snakeCoordinate in this.currentSnakeCoordinates) {
+        foreach (var snakeCoordinate in this.currentSnakeCoordinates)
+        {
             this.fieldScreenBuffer[snakeCoordinate % this.FieldWidth, snakeCoordinate / this.FieldWidth] =
                     FieldScreenBufferElement.Snake;
         }
-        foreach (var obstacleCoordinate in this.currentObstacleCoordinates) {
+        foreach (var obstacleCoordinate in this.currentObstacleCoordinates)
+        {
             this.fieldScreenBuffer[obstacleCoordinate % this.FieldWidth, obstacleCoordinate / this.FieldWidth] =
                     FieldScreenBufferElement.Obstacle;
         }
@@ -611,7 +642,8 @@ internal class NibblesGame
         void setColor(TerminalFormatting foreground, TerminalFormatting background, bool isBrightBackground = false)
         {
             if (!(foreground == currentForeground && background == currentBackground &&
-                    isBrightBackground == currentIsBrightBackground)) {
+                    isBrightBackground == currentIsBrightBackground))
+            {
                 // Set the bold/bright flag so that the terminal uses the bright color.
                 var formattings = new List<TerminalFormatting>()
                 {
@@ -646,13 +678,15 @@ internal class NibblesGame
             var upperLine = this.fieldScreenBuffer[x, y * 2];
             var lowerLine = this.fieldScreenBuffer[x, y * 2 + 1];
 
-            if (upperLine == lowerLine && upperLine == FieldScreenBufferElement.None) {
+            if (upperLine == lowerLine && upperLine == FieldScreenBufferElement.None)
+            {
                 // If both lines have no elements, we simply draw the space char with
                 // blue background.
                 setColor(red, blue);
                 this.consoleBuffer.Append(noneChar);
             }
-            else if (upperLine == lowerLine && upperLine != FieldScreenBufferElement.None) {
+            else if (upperLine == lowerLine && upperLine != FieldScreenBufferElement.None)
+            {
                 // Both lines have the same element. Note that while we use the 'fullChar' for
                 // this, we still set the background color to be the same as the foreground color,
                 // to compensate for some terminals that do not draw the block characters for the
@@ -661,14 +695,16 @@ internal class NibblesGame
                 setColor(color, color, true);
                 this.consoleBuffer.Append(fullChar);
             }
-            else if (upperLine == FieldScreenBufferElement.None || lowerLine == FieldScreenBufferElement.None) {
+            else if (upperLine == FieldScreenBufferElement.None || lowerLine == FieldScreenBufferElement.None)
+            {
                 // Only one line has an element.
                 char charToDraw = upperLine == FieldScreenBufferElement.None ? lowerHalfChar : upperHalfChar;
                 var color = getElementColor(upperLine == FieldScreenBufferElement.None ? lowerLine : upperLine);
                 setColor(color, blue);
                 this.consoleBuffer.Append(charToDraw);
             }
-            else {
+            else
+            {
                 // Both lines have (different) elements. In this case we user the upper line
                 // as foreground and the lower as (bright) background.
                 var upperColor = getElementColor(upperLine);
@@ -678,21 +714,26 @@ internal class NibblesGame
             }
         }
 
-        if (drawOnlyCoordinates == null) {
+        if (drawOnlyCoordinates == null)
+        {
             // Draw the whole field.
-            for (int y = 0; y < this.FieldHeight / 2; y++) {
+            for (int y = 0; y < this.FieldHeight / 2; y++)
+            {
                 // Move the cursor to the line.
                 this.consoleBuffer.Append(this.formatter.SetCursorPosition(0, y + this.FieldYOffset));
 
-                for (int x = 0; x < this.FieldWidth; x++) {
+                for (int x = 0; x < this.FieldWidth; x++)
+                {
                     drawCoordinate(x, y);
                 }
             }
         }
-        else {
+        else
+        {
             // Draw only the coordinates that were specified.
             // Note that we currently don't detect duplicate coordinates.
-            foreach (var coordinate in drawOnlyCoordinates) {
+            foreach (var coordinate in drawOnlyCoordinates)
+            {
                 int y = coordinate / this.FieldWidth / 2;
                 int x = coordinate % this.FieldWidth;
 
@@ -720,7 +761,8 @@ internal class NibblesGame
         drawLines.Add(formattingFull + '█' + formatNone + formatting +
                 new string('▀', drawLineLength - 2) + formattingFull + '█' + formatNone);
 
-        foreach (var line in lines) {
+        foreach (var line in lines)
+        {
             int fillLeft = (drawLineLength - 2 - line.Length) / 2;
             drawLines.Add(formattingFull + '█' + formatNone + formatting +
                     new string(' ', fillLeft) + this.formatter.Format(TerminalFormatting.BoldBright) +
@@ -734,11 +776,12 @@ internal class NibblesGame
 
         int topY = this.consoleHeight / 2 - drawLines.Count / 2;
         int topX = this.consoleWidth / 2 - drawLineLength / 2;
-        for (int i = 0; i < drawLines.Count; i++) {
+        for (int i = 0; i < drawLines.Count; i++)
+        {
             this.consoleBuffer.Append(this.formatter.SetCursorPosition(topX, topY + i))
                     .Append(drawLines[i]);
         }
-        
+
         FlushConsoleBuffer();
     }
 }
