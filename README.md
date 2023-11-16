@@ -1,6 +1,6 @@
 # Nibbles
 
-A simple, console-based snake game, implemented in C# and running on .NET 6.0, inspired by
+A simple, console-based snake game, implemented in C# and running on .NET 8.0, inspired by
 [QBasic Nibbles](https://en.wikipedia.org/wiki/Nibbles_(video_game)) from 1990.
 
 Because it is built for .NET, it can run on any platform that .NET supports, e.g.
